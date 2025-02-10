@@ -1,7 +1,14 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-## Getting Started
+A simple background wave generator for your websites
 
+You need Motion (previously Framer-motion).
+
+npm i motion
+
+Then just copy the code to your files
+
+## Getting Started
 First, run the development server:
 
 ```bash

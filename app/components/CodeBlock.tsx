@@ -3,7 +3,6 @@ import { useState } from "react";
 
 type CodeBlockProps = {
   colors: string[];
-  rotation: number;
 };
 
 export const CodeBlock = ({ colors }: CodeBlockProps) => {
@@ -19,7 +18,6 @@ export default function WaveBackground({ colors }: Props) {
   return (
     <motion.svg
       className="fixed bottom-0 left-0 object-cover object-center w-auto h-full transition-transform duration-500"
-      style={{ transform: \`rotate(\${rotation}deg)\` }}
       viewBox="0 0 960 540"
       width="960"
       height="540"
