@@ -1,6 +1,6 @@
 "use client";
 import WaveBackground from "./animation/WaveBackground";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { CodeBlock } from "./components/CodeBlock";
 
 // Helper function to generate gradient colors
@@ -91,13 +91,30 @@ export default function Home() {
   const [startColor, setStartColor] = useState("#000000");
   const [endColor, setEndColor] = useState("#ffffff");
   const [showCode, setShowCode] = useState(false);
+  const [panelVisible, setPanelVisible] = useState(true);
 
-  const handleCustomColors = () => {
+  // Use useEffect to apply custom colors when startColor or endColor changes
+  useEffect(() => {
     const customScheme = {
       colors: generateGradient(startColor, endColor, 12),
       background: startColor,
     };
     setCurrentScheme(customScheme);
+  }, [startColor, endColor]); // Dependency array ensures this runs when startColor or endColor changes
+
+  const handleRandomColor = () => {
+    const randomColor = () => {
+      return "#" + Math.floor(Math.random() * 16777215).toString(16);
+    };
+    const newStartColor = randomColor();
+    const newEndColor = randomColor();
+
+    setStartColor(newStartColor);
+    setEndColor(newEndColor);
+  };
+
+  const togglePanelVisibility = () => {
+    setPanelVisible(!panelVisible);
   };
 
   return (
@@ -105,72 +122,83 @@ export default function Home() {
       className="w-full h-full min-h-screen relative flex items-center justify-center transition-colors duration-500"
       style={{ backgroundColor: currentScheme.background }}
     >
-      <div className="z-50 bg-white/10 backdrop-blur-md border border-white/20 p-8 rounded-3xl flex flex-col gap-4 text-white max-w-2xl w-full mx-4">
-        <h2 className="text-2xl font-bold text-center mb-4">
-          Wave Background Generator
-        </h2>
+      {panelVisible && (
+        <div className="z-50 bg-white/10 backdrop-blur-md border border-white/20 p-6 rounded-3xl flex flex-col gap-6 text-white max-w-2xl w-full mx-4 shadow-lg transition-all duration-300 ease-in-out">
+          <h2 className="text-3xl font-bold text-center mb-2">
+            Wave Background Generator
+          </h2>
 
-        <div className="grid grid-cols-3 gap-2 mb-6">
-          {Object.entries(colorSchemes).map(([name, scheme]) => (
-            <button
-              key={name}
-              onClick={() => setCurrentScheme(scheme)}
-              className="px-4 py-2 rounded-md capitalize transition-colors"
-              style={{
-                backgroundColor: scheme.colors[0],
-                color: "white",
-              }}
-            >
-              {name}
-            </button>
-          ))}
-        </div>
-
-        <div className="border-t border-white/20 pt-4 mb-4">
-          <h3 className="text-lg font-semibold mb-3">Custom Colors</h3>
-          <div className="flex flex-col gap-3">
-            <div className="flex items-center gap-2">
-              <label>Start:</label>
-              <input
-                type="color"
-                value={startColor}
-                onChange={(e) => setStartColor(e.target.value)}
-                className="w-full h-10 rounded cursor-pointer"
-              />
-            </div>
-            <div className="flex items-center gap-2">
-              <label>End:</label>
-              <input
-                type="color"
-                value={endColor}
-                onChange={(e) => setEndColor(e.target.value)}
-                className="w-full h-10 rounded cursor-pointer"
-              />
-            </div>
-            <button
-              onClick={handleCustomColors}
-              className="px-4 py-2 bg-white/20 rounded-md hover:bg-white/30 transition-colors"
-            >
-              Apply Custom Colors
-            </button>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-6">
+            {Object.entries(colorSchemes).map(([name, scheme]) => (
+              <button
+                key={name}
+                onClick={() => setCurrentScheme(scheme)}
+                className="px-4 py-2 rounded-xl capitalize transition-all duration-200 ease-in-out hover:scale-105 hover:shadow-xl active:scale-95"
+                style={{
+                  backgroundColor: scheme.colors[0],
+                  color: "white",
+                }}
+              >
+                {name}
+              </button>
+            ))}
           </div>
-        </div>
 
-        <div className="border-t border-white/20 pt-4">
           <button
-            onClick={() => setShowCode(!showCode)}
-            className="w-full px-4 py-2 bg-white/20 rounded-md hover:bg-white/30 transition-colors"
+            onClick={handleRandomColor}
+            className="w-full px-4 py-2 bg-white/20 rounded-xl hover:bg-white/30 transition-all duration-200 ease-in-out hover:scale-105 hover:shadow-xl active:scale-95"
           >
-            {showCode ? "Hide Code" : "Show Code"}
+            Random Color
           </button>
-        </div>
 
-        {showCode && (
-          <div className="mt-4 bg-black/50 rounded-md overflow-x-auto">
-            <CodeBlock colors={currentScheme.colors} />
+          <div className="border-t border-white/20 pt-5 mb-4">
+            <h3 className="text-lg font-semibold mb-3">Custom Colors</h3>
+            <div className="flex flex-col gap-4">
+              <div className="flex items-center gap-3">
+                <label className="w-12">Start:</label>
+                <input
+                  type="color"
+                  value={startColor}
+                  onChange={(e) => setStartColor(e.target.value)}
+                  className="w-full h-10 rounded-xl cursor-pointer"
+                />
+              </div>
+              <div className="flex items-center gap-3">
+                <label className="w-12">End:</label>
+                <input
+                  type="color"
+                  value={endColor}
+                  onChange={(e) => setEndColor(e.target.value)}
+                  className="w-full h-10 rounded-xl cursor-pointer"
+                />
+              </div>
+            </div>
           </div>
-        )}
-      </div>
+
+          <div className="border-t border-white/20 pt-5">
+            <button
+              onClick={() => setShowCode(!showCode)}
+              className="w-full px-4 py-2 bg-white/20 rounded-xl hover:bg-white/30 transition-all duration-200 ease-in-out hover:scale-105 hover:shadow-xl active:scale-95"
+            >
+              {showCode ? "Hide Code" : "Show Code"}
+            </button>
+          </div>
+
+          {showCode && (
+            <div className="mt-5 bg-black/50 rounded-xl overflow-x-auto">
+              <CodeBlock colors={currentScheme.colors} />
+            </div>
+          )}
+        </div>
+      )}
+
+      <button
+        onClick={togglePanelVisibility}
+        className="z-50 absolute top-4 right-4 px-4 py-2 bg-white/20 rounded-xl hover:bg-white/30 transition-all duration-200 ease-in-out hover:scale-105 hover:shadow-xl active:scale-95"
+      >
+        {panelVisible ? "Hide Panel" : "Show Panel"}
+      </button>
+
       <WaveBackground colors={currentScheme.colors} />
     </main>
   );
