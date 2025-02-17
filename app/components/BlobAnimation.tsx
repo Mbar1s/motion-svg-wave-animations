@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Blob from "../animation/Blob";
-import { BlobCodeBlock } from "./BlobCodeBlock";
+import { BlobCodeBlock } from "./codeblocks/BlobCodeBlock";
 
 function BlobAnimation() {
   const [blobColor, setBlobColor] = useState("#BB004B");
@@ -17,6 +17,12 @@ function BlobAnimation() {
 
   const toggleShowCode = () => {
     setShowCode(!showCode);
+  };
+
+  // Function to generate a random hex color
+  const generateRandomColor = () => {
+    const randomColor = `#${Math.floor(Math.random() * 16777215).toString(16)}`;
+    setBlobColor(randomColor);
   };
 
   return (
@@ -40,6 +46,13 @@ function BlobAnimation() {
               onChange={(e) => setBlobColor(e.target.value)}
             />
           </div>
+
+          <button
+            onClick={generateRandomColor}
+            className="w-full px-4 py-2 bg-white/20 rounded-xl hover:bg-white/30 transition-all duration-200 ease-in-out hover:scale-105 hover:shadow-xl active:scale-95"
+          >
+            Random Color
+          </button>
 
           <div className="mb-2">
             <label

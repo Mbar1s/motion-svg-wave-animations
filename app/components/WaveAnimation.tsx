@@ -2,7 +2,7 @@ import React from "react";
 
 import WaveBackground from "../animation/WaveBackground";
 import { useState, useEffect } from "react";
-import { CodeBlock } from "./CodeBlock";
+import { CodeBlock } from "./codeblocks/CodeBlock";
 
 // Helper function to generate gradient colors
 const generateGradient = (
